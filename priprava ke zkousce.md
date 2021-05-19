@@ -477,6 +477,7 @@ https://support.hostway.com/hc/en-us/articles/115001509884-How-To-Use-SSH-Keys-o
 Firewall
 https://sleeplessbeastie.eu/2018/09/10/how-to-make-iptables-configuration-persistent/
 https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
+https://upcloud.com/community/tutorials/configure-iptables-debian/
 
 Allow loopback:
 sudo iptables -A INPUT -i lo -j ACCEPT
@@ -485,22 +486,16 @@ sudo iptables -A OUTPUT -o lo -j ACCEPT
 allow established incomming:
 sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
-allow established outcomming:
-sudo iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
-
-sudo iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
-
 drop invalid:
 sudo iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 
 
 allow SSH
-sudo iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-sudo iptables -A OUTPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport ssh -j ACCEPT
 
 allow http
-sudo iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-sudo iptables -A OUTPUT -p tcp --sport 80 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+
 
 allow MySQL from specified IP
 sudo iptables -A INPUT -p tcp -s 15.15.15.0/24 --dport 3306 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
@@ -528,3 +523,8 @@ delete rule:
 https://www.digitalocean.com/community/tutorials/how-to-list-and-delete-iptables-firewall-rules
 sudo iptables -L --line-numbers
 poté např. sudo iptables -D INPUT 3
+
+
+persistent:
+apt install iptables-persistent
+save: sudo iptables-save > /etc/iptables/rules.v4
