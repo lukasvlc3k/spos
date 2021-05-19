@@ -1,0 +1,21 @@
+mkdir -p ~/.ssh
+echo "ssh-rsa <public key>" >> ~/.ssh/authorized_keys
+chmod -R go= ~/.ssh
+chown -R nio:nio ~/.ssh
+
+
+mkdir -p /root/.ssh
+echo "ssh-rsa <public key>" >> /root/.ssh/authorized_keys
+chmod -R go= /root/.ssh
+chown -R root:root /root/.ssh
+
+
+nano /etc/ssh/sshd_config
+
+
+
+Přidání do sudo:
+------------------------------------------
+sudo visudo
+In the bottom of the file, add the following line:
+nio ALL=(ALL) NOPASSWD: ALL
