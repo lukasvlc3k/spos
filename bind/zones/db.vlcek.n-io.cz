@@ -1,0 +1,17 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL	604800
+@	IN	SOA	vlcek.spos.n-io.cz. root.localhost. (
+			      6		; Serial
+			 300		; Refresh
+			  300		; Retry
+			600		; Expire
+			 600 )		; Negative Cache TTL
+;
+
+@         IN      NS                vlcek.spos.n-io.cz.
+@	IN	A	77.93.216.102
+@	IN	A	127.0.0.1
+mail	IN	A	127.0.0.1
+barticka	IN	A	77.93.216.97
