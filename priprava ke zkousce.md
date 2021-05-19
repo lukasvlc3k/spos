@@ -459,7 +459,15 @@ obecně není problém, ale defaultně se bere úkol jako "udělat v * * * * * *
 
 
 
+Add key SSH
+---------------------------------------------------------------------------------------------------
+ssh-keygen -b bits -t rsa    výstup v ~/.ssh/id_rsa(.pub)  
+ssh-add private key
+ssh user@ip
 
+Putty login via ssh key:
+https://support.hostway.com/hc/en-us/articles/115001509884-How-To-Use-SSH-Keys-on-Windows-Clients-with-PuTTY-
+---------------------------------------------------------------------------------------------------
 
 
 Firewall
