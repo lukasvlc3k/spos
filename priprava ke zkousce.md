@@ -1,3 +1,5 @@
+https://github.com/jindrichskupa/kiv-spos
+
 Konfigurace SSH
 ---------------------------------------------------------------------------------------------------
 apt install openssh-client openssh-server	(pokud není sshd)
@@ -58,6 +60,8 @@ nano /etc/fstab
 /dev/group/drive1	/mnt/drive1	defaults	0	0
 
 mount -a (kontrola)
+lsblk
+
 
 DNS
 ---------------------------------------------------------------------------------------------------
