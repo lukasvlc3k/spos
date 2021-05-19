@@ -555,60 +555,82 @@ ssh user@ip
 
 Putty login via ssh key:
 https://support.hostway.com/hc/en-us/articles/115001509884-How-To-Use-SSH-Keys-on-Windows-Clients-with-PuTTY-
----------------------------------------------------------------------------------------------------
 
 
 Firewall
+---------------------------------------------------------------------------------------------------
+
 https://sleeplessbeastie.eu/2018/09/10/how-to-make-iptables-configuration-persistent/
 https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
 https://upcloud.com/community/tutorials/configure-iptables-debian/
 
 Allow loopback:
+```
 sudo iptables -A INPUT -i lo -j ACCEPT
 sudo iptables -A OUTPUT -o lo -j ACCEPT
-
+```
 allow established incomming:
+```
 sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-
+```
+	
 drop invalid:
+```
 sudo iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
-
+```
 
 allow SSH
+```
 sudo iptables -A INPUT -p tcp --dport ssh -j ACCEPT
-
+```
+	
 allow http
+```
 sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-
+```
 
 allow MySQL from specified IP
+```
 sudo iptables -A INPUT -p tcp -s 15.15.15.0/24 --dport 3306 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --sport 3306 -m conntrack --ctstate ESTABLISHED -j ACCEPT
-
-allow postgres from specific IP 
+```
+	
+allow postgres from specific IP
+```
 sudo iptables -A INPUT -p tcp -s 15.15.15.0/24 --dport 5432 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --sport 5432 -m conntrack --ctstate ESTABLISHED -j ACCEPT
-
+```
+	
 allow postgres to specific network interface:
+```
 sudo iptables -A INPUT -i eth1 -p tcp --dport 5432 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -o eth1 -p tcp --sport 5432 -m conntrack --ctstate ESTABLISHED -j ACCEPT
-
+```
 
 Drop all other:
+```
 iptables -P INPUT DROP
 (changing default chain policy)
-
+```
 
 list policies:
+```
 iptables -L 
 iptables -S
-
+```
+	
 delete rule:
 https://www.digitalocean.com/community/tutorials/how-to-list-and-delete-iptables-firewall-rules
+```
 sudo iptables -L --line-numbers
 poté např. sudo iptables -D INPUT 3
-
+```
 
 persistent:
+```
 apt install iptables-persistent
-save: sudo iptables-save > /etc/iptables/rules.v4
+```
+save: 
+```
+sudo iptables-save > /etc/iptables/rules.v4
+```
