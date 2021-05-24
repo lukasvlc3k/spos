@@ -114,13 +114,13 @@ konfigurace zón v /etc/named.conf.local
 ```
 zone "barticka.spos." {			// Takhle definujeme zónu kde jsme master
     type master;
-    file  "/etc/bind/db.barticka.spos"
+    file  "/etc/bind/db.barticka.spos";
     allow-transfer { adresa; };
 };
 
 zone "nekdojinej.spos." {			// Takhle definujeme zónu kde jsme slave
     type slave;
-    file  "/etc/bind/slaves/db.barticka.spos"
+    file  "/etc/bind/slaves/db.barticka.spos";
     masters { ip adresa mastera; };
 };
 
