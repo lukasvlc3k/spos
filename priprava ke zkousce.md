@@ -27,6 +27,12 @@ konfigurace v /etc/ssh/sshd_config
 	AllowedUsers		root user1 user2 ...
 ```
 
+IPTables pro SSH
+```
+iptables -A INPUT -p tcp -s YourIP --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -j DROP
+```
+
 
 Konfigurace fail2ban
 ---------------------------------------------------------------------------------------------------
