@@ -109,24 +109,6 @@ apt install bind9
 zóny v
 /etc/bind/named.conf.local
 
-konfigurace zón v
-/etc/bind/zones/db.barticka. ...
-
-```
-$TTL    604800
-@       IN      SOA     hostname. root.localhost. (
-                              7         ; Serial
-                         604800         ; Refresh
-                          86400         ; Retry
-                        2419200         ; Expire
-                         604800 )       ; Negative Cache TTL
-
-@       IN      NS      ns.hostname.	; Definovat nameserver
-@       IN      A       77.93.216.97
-ns      IN      A       77.93.216.97	; Pro subdoménu ns použít tuto adresu
-mail    IN      A       2.2.2.2	; Pro subdoménu mail použít tuto adresu
-```
-
 konfigurace zón v /etc/named.conf.local
 
 ```
@@ -146,6 +128,24 @@ zone "nekdojinej.spos." {				// Takhle definujeme zónu, pro kterou forwardujeme
     type forward;
     forwarders { ip adresa kam forwardujeme; };
 }
+```
+
+konfigurace DNS záznamů v
+/etc/bind/zones/db.barticka. ...
+
+```
+$TTL    604800
+@       IN      SOA     hostname. root.localhost. (
+                              7         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+
+@       IN      NS      ns.hostname.	; Definovat nameserver
+@       IN      A       77.93.216.97
+ns      IN      A       77.93.216.97	; Pro subdoménu ns použít tuto adresu
+mail    IN      A       2.2.2.2	; Pro subdoménu mail použít tuto adresu
 ```
 
 Můžeme definovat ACL, které pak využijeme v match-clients
