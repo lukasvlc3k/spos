@@ -285,6 +285,27 @@ Pro HTTPS (nový .conf)
 </VirtualHost>
 ```
 
+Pro zaheslování přidat 
+```
+<Location /co_je_pod_heslem>
+                AuthType Basic				
+                AuthName "Restricted Access"		
+                AuthUserFile /etc/apache2/.htpasswd	
+                Require user app_user1			
+        </Location>
+```
+
+AuthType Basic znamená, že chceme heslo. AuthUserFile musíme vytvořeit pokud ještě neexistuje. Require může mít senam uživatelů, nebo valid-user pro kohokoliv se jménem a heslem.
+
+Pro vytvoření .htpasswd
+```
+apt install apache2-utils
+
+htpasswd -c /etc/apache2/.htpasswd username
+htpasswd /etc/apache2/.htpasswd username
+```
+-c slouží k vytvoření, bez c jenom přidáváme uživatele
+po zadání pžíkazu se ukáže prompt na heslo
 
 povolení PHP
 ```
@@ -388,14 +409,22 @@ su - postgres
 
 místo mysql příkaz psql
 
+```
 \l			- vylistovat databáze
 \c databaze		- 
 \dt 
 \d tabulka
 \x on | \x off
+```
 
-příkazy viz. github
+je potřeba po vytvoření tabulky v databázi přidat oprávnění na danou tabulku uživateli
 
+```
+\c db01
+GRANT ALL PRIVILEGES ON table01 TO user01;
+```
+
+Více příkazů viz. Skupovo GitHub
 
 
 MAIL
@@ -418,6 +447,53 @@ mailbox_command =
 mydestination = ...	možno přidat doménu, pak ji bude brát v potaz localhost
 ```
 
+Aliasy v /etc/aliases
+Přesměrování schránky na schránku uživatele
+
+Po změně aktualizovat
+```
+newaliases
+```
+
+Možno vytvořit virtuální maily - potřeba pro složitější věci než přesměrování schránek.
+
+v /etc/postfix/main.cf
+```
+virtual_alias_domains_map = hash:/etc/postfix/virtual_domains
+virtual_alias_maps = hash:/etc/postfix/virtual
+```
+
+v /etc/postfix/virtual_domains
+```
+jindra3.spos	OK
+<doména>	OK
+...
+```
+
+v /etc/postfix/virtual
+```
+<jaky mail>		<jakemu uzivateli>
+user@jindra3.spos	jindra
+```
+všechny použité domény ale musí být uvedeny ve virtual_domains
+
+Pak ještě můžeme udělat mapování mailboxů, aby nám to nějak rozumně chodilo tam kam má
+
+v /etc/postfix/main.cf
+```
+virtual_mailbox_domains_maps = hash:/etc/postfix/vmailbox_domains
+virtual_mailbox_maps = hash:/etc/postfix/vmailbox
+virtual_mailbox_base = /home/vmail/vhosts
+```
+v /etc/postfix/vmailbox
+```
+<adresa>		<složka>
+abcd@jindra5.spos	jindra5.spos/abcd
+@indra5.spos		jindra5.spos/zbytek
+```
+
+Mutt pro prohlížení
+
 ```
 apt install mutt
 mutt -f /var/spool/mail/user
@@ -430,7 +506,7 @@ apt-get install dovecot-imapd
 ```
 
 
-konfigurace v /etc/dovecot/conf.d/10-mail.conf	- možno nastavit maildir
+konfigurace v /etc/dovecot/conf.d/10-mail.conf	- možno nastavit maildir, aby Mutt bral maily ze správného místa
 
 ```
 
