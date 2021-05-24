@@ -218,6 +218,15 @@ view "default" {
 	};
 ```
 
+Ověření:
+
+```
+host <hostname> localhost
+host <hostname> -t MX localhost
+
+DNS servery v /etc/resolv.conf
+```
+
 ## Apache2
 
 ```
