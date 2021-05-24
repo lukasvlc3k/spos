@@ -504,11 +504,13 @@ user@jindra3.spos	jindra
 ```
 
 přidat uživatele
+
 ```
 adduser jindra
 ```
 
 potvrdit přes
+
 ```
 postmap /etc/postfix/virtual
 ```
@@ -558,6 +560,12 @@ set spoolfile = imap://jindra:jindra123@localhost:143/
 
 postmap <cesta> (vytvoří nový db file)
 případně newalias (vytvoří db z aliasů)
+
+Mutt:
+
+```
+mutt -f ~<uzivatel>/Maildir
+```
 
 ## NFS
 
