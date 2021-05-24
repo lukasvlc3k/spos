@@ -1,25 +1,28 @@
 https://github.com/jindrichskupa/kiv-spos
 
-Rsync
-------------------------------------------
+## Rsync
+
 ```
 rsync -rav /source/path/ /dest/path/
 rsync -rav --dry-run			- na zkoušku
 ```
 
-Konfigurace SSH
----------------------------------------------------------------------------------------------------
+## Konfigurace SSH
+
 ```
 apt install openssh-client openssh-server	(pokud není sshd)
 ```
+
 ```
 ~/.ssh/authorized_keys	< pubkey
 ```
+
 ```
 ssh-keygen -b bits -t rsa  	výstup v ~/.ssh/id_rsa(.pub)
 ```
 
 konfigurace v /etc/ssh/sshd_config
+
 ```
 
 	PermitRootLogin	yes/no/prohibit-password
@@ -28,22 +31,22 @@ konfigurace v /etc/ssh/sshd_config
 ```
 
 IPTables pro SSH
+
 ```
 iptables -A INPUT -p tcp -s YourIP --dport 22 -j ACCEPT
 iptables -A INPUT -p tcp --dport 22 -j DROP
 ```
 
+## Konfigurace fail2ban
 
-Konfigurace fail2ban
----------------------------------------------------------------------------------------------------
 apt install fail2ban
 
 konfigurace v /etc/fail2ban/jail.conf
 
-ignorování ip adres přes ignoreip = ip1 ip2 ...	
+ignorování ip adres přes ignoreip = ip1 ip2 ...
 
-Vytvoření RAIDu
----------------------------------------------------------------------------------------------------
+## Vytvoření RAIDu
+
 ```
 apt install mdadm
 ```
@@ -58,8 +61,8 @@ mdadm --create --verbose /dev/md0 --level=10 --raid-devices=2 /dev/sdb /dev/sdc
 cat /proc/mdstat (kontrola)
 ```
 
-LVM
----------------------------------------------------------------------------------------------------
+## LVM
+
 ```
 apt install lvm2
 ```
@@ -71,19 +74,18 @@ pvdisplay
 ```
 
 ```
-vgcreate group /dev/sda
-vgextend group /dev/sd[bc]
+vgcreate <group_name> /dev/sda
+vgextend <group_name> /dev/sd[bc]
 vgdisplay
 ```
 
 ```
-lvcreate -n drive1 -L 1g group
+lvcreate -n <partition_name> -L 1g <group_name>
 lvdisplay
 ```
 
+## MKFS a Mount
 
-MKFS a Mount
----------------------------------------------------------------------------------------------------
 ```
 mkfs.ext4 /dev/group/drive1
 mount /dev/group/drive1 /mnt/drive1 (pro lvm)
@@ -98,14 +100,13 @@ mount -a (kontrola)
 lsblk
 ```
 
+## DNS
 
-DNS
----------------------------------------------------------------------------------------------------
 ```
 apt install bind9
 ```
 
-zóny v 
+zóny v
 /etc/bind/named.conf.local
 
 konfigurace zón v
@@ -121,7 +122,7 @@ $TTL    604800
                          604800 )       ; Negative Cache TTL
 
 @       IN      NS      ns.hostname.	; Definovat nameserver
-@       IN      A       77.93.216.97	
+@       IN      A       77.93.216.97
 ns      IN      A       77.93.216.97	; Pro subdoménu ns použít tuto adresu
 mail    IN      A       2.2.2.2	; Pro subdoménu mail použít tuto adresu
 ```
@@ -147,8 +148,8 @@ zone "nekdojinej.spos." {				// Takhle definujeme zónu, pro kterou forwardujeme
 }
 ```
 
-
 Můžeme definovat ACL, které pak využijeme v match-clients
+
 ```
 acl "trusted" {							// Definujeme ACL
         77.93.199.0/24;    # ns1 - can be set to localhost		// Povolené adresy
@@ -160,6 +161,7 @@ acl "trusted" {							// Definujeme ACL
 ```
 
 Options definuje globální nastavení
+
 ```
 options {
         directory "/var/cache/bind";
@@ -177,9 +179,10 @@ options {
 ```
 
 Můžeme použít i pohledy
+
 ```
 view "private" {					// Definujeme pohled
-  match-clients { trusted; 192.168.0.0/24; }; // Pro ktere klienty 
+  match-clients { trusted; 192.168.0.0/24; }; // Pro ktere klienty
   recursion yes;				// Povolime rekurzi
   zone "barticka.spos." {			// Definujeme zony
     type master;
@@ -187,7 +190,7 @@ view "private" {					// Definujeme pohled
     allow-transfer { adresa; };
   };
 
-  zone "nekdojinej.spos." {			
+  zone "nekdojinej.spos." {
     type slave;
     file  "/etc/bind/slaves/db.barticka.spos"
     masters { ip adresa mastera; };
@@ -195,7 +198,7 @@ view "private" {					// Definujeme pohled
 };
 
 view "public" {				// Musime definovat pohled pro ostatni, jinak je budeme ignorovat
-match-clients { "any"; }; 
+match-clients { "any"; };
   recursion no;
   zone "barticka.spos." {
     type master;
@@ -203,7 +206,6 @@ match-clients { "any"; };
   };
 };
 ```
-
 
 Pokud používáme pohledy, musíme je použít i v /etc/bind/named.conf.default-zones
 Přidáme proto
@@ -215,25 +217,23 @@ view "default" {
 	...
 	};
 ```
-	
-	
-Apache2
----------------------------------------------------------------------------------------------------
+
+## Apache2
+
 ```
 apt install apache2
 ```
 
-
 kontrola konfigurací přes
+
 ```
-apachectl -S a -t	
+apachectl -S a -t
 ```
 
 webová stránka ve /var/www/html
-konfigurace v /etc/apache2	
-sites-available		- dostupné stránky		povolit stránku přes a2ensite/a2dissite
-sites-enabled		- běžící stránky
-	
+konfigurace v /etc/apache2
+sites-available - dostupné stránky povolit stránku přes a2ensite/a2dissite
+sites-enabled - běžící stránky
 změnit 000-default.conf
 
 Pro HTTP
@@ -268,7 +268,7 @@ Pro HTTPS (nový .conf)
 
                 SSLEngine on
 
-                SSLCertificateFile      /etc/letsencrypt/live/barticka.spos.n-io.cz/cert.pem		
+                SSLCertificateFile      /etc/letsencrypt/live/barticka.spos.n-io.cz/cert.pem
                 SSLCertificateKeyFile   /etc/letsencrypt/live/barticka.spos.n-io.cz/privkey.pem
 
                 #SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
@@ -291,36 +291,40 @@ Pro HTTPS (nový .conf)
 </VirtualHost>
 ```
 
-Pro zaheslování přidat 
+Pro zaheslování přidat
+
 ```
 <Location /co_je_pod_heslem>
-                AuthType Basic				
-                AuthName "Restricted Access"		
-                AuthUserFile /etc/apache2/.htpasswd	
-                Require user app_user1			
+                AuthType Basic
+                AuthName "Restricted Access"
+                AuthUserFile /etc/apache2/.htpasswd
+                Require user app_user1
         </Location>
 ```
 
 AuthType Basic znamená, že chceme heslo. AuthUserFile musíme vytvořeit pokud ještě neexistuje. Require může mít senam uživatelů, nebo valid-user pro kohokoliv se jménem a heslem.
 
 Pro vytvoření .htpasswd
+
 ```
 apt install apache2-utils
 
 htpasswd -c /etc/apache2/.htpasswd username
 htpasswd /etc/apache2/.htpasswd username
 ```
+
 -c slouží k vytvoření, bez c jenom přidáváme uživatele
 po zadání pžíkazu se ukáže prompt na heslo
 
 povolení PHP
+
 ```
 apt-get install php libapache2-mod-php php-mysql
 a2enmod php7.3
 ```
 
-
 LetsEncrypt
+
 ```
 a2enmod ssl
 
@@ -338,6 +342,7 @@ CERTDIR="/etc/letsencrypt/live/"
 CONTACT_EMAIL=barticka@students.zcu.cz
 HOOK=/etc/dehydrated/hook.sh
 ```
+
 ```
 nano /etc/dehydrated/domains < hostname
 
@@ -348,32 +353,35 @@ dehydrated --register --accept-terms
 dehydrated --cron
 ```
 
+## MySQL
 
-MySQL
----------------------------------------------------------------------------------------------------
 ```
 apt-get install mariadb-server
 apt install php-mysql
 ```
 
-konfigurace v /etc/mysql/mariadb.conf.d	- 50-server a 50-client
+konfigurace v /etc/mysql/mariadb.conf.d - 50-server a 50-client
 
 vytvoření databáze
+
 ```
 CREATE DATABASE db01 DEFAULT CHARACTER SET utf8  DEFAULT COLLATE utf8_general_ci;
 ```
 
-přepnutí do databáze 
+přepnutí do databáze
+
 ```
 USE db01
 ```
 
 vytvoření uživatele
+
 ```
 CREATE USER 'db01'@'localhost' IDENTIFIED BY 'password';		// localhost možno nahradi třeba % pro všechny
 ```
 
 přihlášení
+
 ```
 mysql -u db01 -ppassword
 ```
@@ -381,6 +389,7 @@ mysql -u db01 -ppassword
 konfigurace přihlášení v ~/.my.cnf
 
 grant privilegií
+
 ```
 GRANT ALL PRIVILEGES ON db01.* to 'db01'@'localhost' IDENTIFIED BY 'password';
 ```
@@ -392,16 +401,14 @@ pokud není engine InnoDB, jde to překopírováním té složky přes rsync
 
 pokud je InnoDB, jde to přes mysqldump, jako
 
-mysqldump > cílový soubor	- to vygereruje SQLko
+mysqldump > cílový soubor - to vygereruje SQLko
 
+## Postgres
 
-Postgres
----------------------------------------------------------------------------------------------------
 ```
 apt install postgresql-11
 apt install php-pgsql
 ```
-
 
 startování databáze přes pg_ctlcluster verze sekce start
 
@@ -409,16 +416,17 @@ konfigurace ve /etc/postgresql/verze
 databázové soubory ve /var/lib/postgresql
 
 přepnutí pod uživatele postgres
+
 ```
-su - postgres	
+su - postgres
 ```
 
 místo mysql příkaz psql
 
 ```
 \l			- vylistovat databáze
-\c databaze		- 
-\dt 
+\c databaze		-
+\dt
 \d tabulka
 \x on | \x off
 ```
@@ -432,9 +440,8 @@ GRANT ALL PRIVILEGES ON table01 TO user01;
 
 Více příkazů viz. Skupovo GitHub
 
+## MAIL
 
-MAIL
-----------------------------------------------------------------------------------------------------
 ```
 apt install postfix
 ```
@@ -446,7 +453,8 @@ maily defaultně ve /var/spool/mail/user
 echo "Test" | mail -s "Testovaci mail" jindra@jindra.spos
 ```
 
-konfigurace v /etc/postfix/main.cf	
+konfigurace v /etc/postfix/main.cf
+
 ```
 home_mailbox = Maildir/
 mailbox_command =
@@ -457,6 +465,7 @@ Aliasy v /etc/aliases
 Přesměrování schránky na schránku uživatele
 
 Po změně aktualizovat
+
 ```
 newaliases
 ```
@@ -464,12 +473,14 @@ newaliases
 Možno vytvořit virtuální maily - potřeba pro složitější věci než přesměrování schránek.
 
 v /etc/postfix/main.cf
+
 ```
 virtual_alias_domains_map = hash:/etc/postfix/virtual_domains
 virtual_alias_maps = hash:/etc/postfix/virtual
 ```
 
 v /etc/postfix/virtual_domains
+
 ```
 jindra3.spos	OK
 <doména>	OK
@@ -477,21 +488,26 @@ jindra3.spos	OK
 ```
 
 v /etc/postfix/virtual
+
 ```
 <jaky mail>		<jakemu uzivateli>
 user@jindra3.spos	jindra
 ```
+
 všechny použité domény ale musí být uvedeny ve virtual_domains
 
 Pak ještě můžeme udělat mapování mailboxů, aby nám to nějak rozumně chodilo tam kam má
 
 v /etc/postfix/main.cf
+
 ```
 virtual_mailbox_domains_maps = hash:/etc/postfix/vmailbox_domains
 virtual_mailbox_maps = hash:/etc/postfix/vmailbox
 virtual_mailbox_base = /home/vmail/vhosts
 ```
+
 v /etc/postfix/vmailbox
+
 ```
 <adresa>		<složka>
 abcd@jindra5.spos	jindra5.spos/abcd
@@ -511,8 +527,7 @@ apt-get install dovecot-pop3d
 apt-get install dovecot-imapd
 ```
 
-
-konfigurace v /etc/dovecot/conf.d/10-mail.conf	- možno nastavit maildir, aby Mutt bral maily ze správného místa
+konfigurace v /etc/dovecot/conf.d/10-mail.conf - možno nastavit maildir, aby Mutt bral maily ze správného místa
 
 ```
 
@@ -521,38 +536,36 @@ konfigurace v /etc/dovecot/conf.d/10-mail.conf	- možno nastavit maildir, aby Mu
 set folder    = imap://jindra:jindra123@localhost:143/
 set spoolfile = imap://jindra:jindra123@localhost:143/
 ```
-	
+
 postmap <cesta> (vytvoří nový db file)
 případně newalias (vytvoří db z aliasů)
 
+## NFS
 
-NFS
----------------------------------------------------------------------------------------------------
 ```
 apt install nfs-kernel-server
-	
+
 /etc/exports	- nastaveni sdileni
 exportfs -a	- provedeni zmen
 ```
-	
-namountovani:	
+
+namountovani:
+
 ```
 mount -t nfs ipadresa:/srv/share /mnt/nfs
 ```
 
 do fstab:
 
-```	
+```
 ipadresa:/srv/share	/mnt/nfs	nfs	defaults	0	0
 ```
 
 je potřeba změnit oprávnění u /srv/share - chmod 777
 
+## Samba
 
-Samba
----------------------------------------------------------------------------------------------------
-
-```	
+```
 apt-get install samba smbclient cifs-utils	-> NO
 
 smbpasswd -a user		- přidání uživatele
@@ -560,31 +573,33 @@ smbclient -L			- vylistování dostupných samba disků
 ```
 
 konfigurace v /etc/samba/smb.conf
+
 ```
 interfaces	- kde jsme vidět
 workgroup	- skupina
-	
+
 přidat share viz. github - ne mezery, ale \n
 ```
-		
-```	
-systemctl restart smbd	
+
+```
+systemctl restart smbd
 smbclient //localhost/share1 -U user		- připojení na sdílený disk
 ```
 
 mountování přes
+
 ```
 mount -t cifs //localhost/share1 /mnt/share -o username=jindra
 ```
 
 do fstabu přes
+
 ```
 //localhost/share1	/mnt/share	cifs	username=user,password=password	0	0
 ```
 
+## NginX
 
-NginX
----------------------------------------------------------------------------------------------------
 ```
 apt install nginx
 ```
@@ -593,51 +608,52 @@ NginX běží na stejných portech jako Apache, ten je potřeba přemigrovat na 
 
 konfigurace v /etc/nginx/sites-enabled
 
-pro SSL přidat 	
+pro SSL přidat
 
 ```
 listen port ssl default_server;
 ssl_certificate /fullchain;
 ssl_certificate_key /privkey;
 ```
-        			
+
 jako load balancer změnit root aby nebyl stejný jako u apache
-       
+
 potom upravit location - tohle provede přesměrování, nic víc
+
 ```
 location / {
 	proxy_pass http://localhost:port
-} 			
+}
 ```
-	
-	
+
 pro load balancing přidáme upstream
-```	
+
+```
 upstream backend  {
         ip_hash;						# hash IP adres - stejné IP adresy posíláme na stejné servery
         server localhost:8080 max_fails=2 fail_timeout=5s;		# seznam serverů
         server localhost:8081 max_fails=2 fail_timeout=5s;
 }
-```	
-a potom v proxy_pass použijeme upstream        
-```	
+```
+
+a potom v proxy_pass použijeme upstream
+
+```
 location / {
        	proxy_pass http://upstream;
-} 
+}
 ```
-       
 
-Cron
----------------------------------------------------------------------------------------------------
+## Cron
 
 konfigurace v /etc/crontab
 
-obecně není problém, ale defaultně se bere úkol jako "udělat v * * * * * *", ale je možné to změnit na "udělat každých * */x * * *", resp. dát před hodnotu lomítko       
+obecně není problém, ale defaultně se bere úkol jako "udělat v \* \* \* \* \* _", ale je možné to změnit na "udělat každých _ _/x _ \* \*", resp. dát před hodnotu lomítko
 
-Add key SSH
----------------------------------------------------------------------------------------------------
+## Add key SSH
+
 ```
-ssh-keygen -b bits -t rsa    výstup v ~/.ssh/id_rsa(.pub)  
+ssh-keygen -b bits -t rsa    výstup v ~/.ssh/id_rsa(.pub)
 ssh-add private key
 ssh user@ip
 ```
@@ -645,81 +661,94 @@ ssh user@ip
 Putty login via ssh key:
 https://support.hostway.com/hc/en-us/articles/115001509884-How-To-Use-SSH-Keys-on-Windows-Clients-with-PuTTY-
 
-
-Firewall
----------------------------------------------------------------------------------------------------
+## Firewall
 
 https://sleeplessbeastie.eu/2018/09/10/how-to-make-iptables-configuration-persistent/
 https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands
 https://upcloud.com/community/tutorials/configure-iptables-debian/
 
 Allow loopback:
+
 ```
 sudo iptables -A INPUT -i lo -j ACCEPT
 sudo iptables -A OUTPUT -o lo -j ACCEPT
 ```
+
 allow established incomming:
+
 ```
 sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 ```
-	
+
 drop invalid:
+
 ```
 sudo iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 ```
 
 allow SSH
+
 ```
 sudo iptables -A INPUT -p tcp --dport ssh -j ACCEPT
 ```
-	
+
 allow http
+
 ```
 sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 ```
 
 allow MySQL from specified IP
+
 ```
 sudo iptables -A INPUT -p tcp -s 15.15.15.0/24 --dport 3306 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --sport 3306 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
-	
+
 allow postgres from specific IP
+
 ```
 sudo iptables -A INPUT -p tcp -s 15.15.15.0/24 --dport 5432 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --sport 5432 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
-	
+
 allow postgres to specific network interface:
+
 ```
 sudo iptables -A INPUT -i eth1 -p tcp --dport 5432 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A OUTPUT -o eth1 -p tcp --sport 5432 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
 Drop all other:
+
 ```
 iptables -P INPUT DROP
 (changing default chain policy)
 ```
 
 list policies:
+
 ```
-iptables -L 
+iptables -L
 iptables -S
 ```
-	
+
 delete rule:
 https://www.digitalocean.com/community/tutorials/how-to-list-and-delete-iptables-firewall-rules
+
 ```
 sudo iptables -L --line-numbers
 poté např. sudo iptables -D INPUT 3
 ```
 
 persistent:
+
 ```
 apt install iptables-persistent
 ```
-save: 
+
+save:
+
 ```
 sudo iptables-save > /etc/iptables/rules.v4
 ```
