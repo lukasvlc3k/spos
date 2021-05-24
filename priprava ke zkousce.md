@@ -616,7 +616,7 @@ smbclient //localhost/share1 -U user		- připojení na sdílený disk
 mountování přes
 
 ```
-mount -t cifs //localhost/share1 /mnt/share -o username=jindra
+mount -t cifs //localhost/share1 /mnt/share -o username=jindra,password=password
 ```
 
 do fstabu přes
