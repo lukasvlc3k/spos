@@ -222,7 +222,7 @@ Ověření:
 
 ```
 host <hostname> localhost
-host <hostname> -t MX localhost
+host -t MX <hostname> localhost
 
 DNS servery v /etc/resolv.conf
 ```
