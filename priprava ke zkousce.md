@@ -598,6 +598,8 @@ apt-get install samba smbclient cifs-utils	-> NO
 smbpasswd -a user		- přidání uživatele
 smbclient -L			- vylistování dostupných samba disků
 ```
+Uživatel musí existovat v systému, jinak to nefunguje (takže kdyžtak adduser)	
+	
 
 konfigurace v /etc/samba/smb.conf
 
