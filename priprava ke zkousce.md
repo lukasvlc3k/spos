@@ -503,6 +503,16 @@ v /etc/postfix/virtual
 user@jindra3.spos	jindra
 ```
 
+přidat uživatele
+```
+adduser jindra
+```
+
+potvrdit přes
+```
+postmap /etc/postfix/virtual
+```
+
 všechny použité domény ale musí být uvedeny ve virtual_domains
 
 Pak ještě můžeme udělat mapování mailboxů, aby nám to nějak rozumně chodilo tam kam má
