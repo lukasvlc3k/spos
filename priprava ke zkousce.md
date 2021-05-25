@@ -455,13 +455,9 @@ přepnutí pod uživatele postgres
 
 ```
 su - postgres
-```
-
-místo mysql příkaz psql
-
-```
+psql			- otevreni sql
 \l			- vylistovat databáze
-\c databaze		-
+\c databaze
 \dt
 \d tabulka
 \x on | \x off
@@ -471,6 +467,7 @@ je potřeba po vytvoření tabulky v databázi přidat oprávnění na danou tab
 
 ```
 \c db01
+GRANT ALL PRIVILEGES ON DATABASE db01 to db01;
 GRANT ALL PRIVILEGES ON table01 TO user01;
 ```
 
