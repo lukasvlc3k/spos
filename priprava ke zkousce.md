@@ -657,6 +657,15 @@ konfigurace v /etc/samba/smb.conf
 ```
 interfaces	- kde jsme vidět
 workgroup	- skupina
+	
+[share1]
+        comment = Prvni share co jsem kdy vyrobili
+        path = /srv/share1
+        browsable = yes        
+	writable = yes
+        guest ok = yes
+        create mask = 0600
+        directory mask = 0700	
 
 přidat share viz. github - ne mezery, ale \n
 ```
