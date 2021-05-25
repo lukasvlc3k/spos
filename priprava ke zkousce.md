@@ -263,43 +263,6 @@ Pro HTTP
 </VirtualHost>
 ```
 
-Pro HTTPS (nový .conf)
-
-```
-<VirtualHost _default_:443>
-                ServerAdmin webmaster@localhost
-
-                DocumentRoot /var/www/html
-                ServerName barticka.spos.n-io.cz
-
-                ErrorLog ${APACHE_LOG_DIR}/error.log
-                CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-                SSLEngine on
-
-                SSLCertificateFile      /etc/letsencrypt/live/barticka.spos.n-io.cz/cert.pem
-                SSLCertificateKeyFile   /etc/letsencrypt/live/barticka.spos.n-io.cz/privkey.pem
-
-                #SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
-
-                #SSLCACertificatePath /etc/ssl/certs/
-                #SSLCACertificateFile /etc/apache2/ssl.crt/ca-bundle.crt
-
-                #SSLCARevocationPath /etc/apache2/ssl.crl/
-                #SSLCARevocationFile /etc/apache2/ssl.crl/ca-bundle.crl
-
-                #SSLVerifyClient require
-                #SSLVerifyDepth  10
-
-                <FilesMatch "\.(cgi|shtml|phtml|php)$">
-                                SSLOptions +StdEnvVars
-                </FilesMatch>
-                <Directory /usr/lib/cgi-bin>
-                                SSLOptions +StdEnvVars
-                </Directory>
-</VirtualHost>
-```
-
 Pro zaheslování přidat
 
 ```
@@ -353,6 +316,42 @@ WELLKNOWN="/var/www/dehydrated/.well-known/acme-challenge/"
 CERTDIR="/etc/letsencrypt/live/"
 CONTACT_EMAIL=barticka@students.zcu.cz
 HOOK=/etc/dehydrated/hook.sh
+```
+
+Pro HTTPS (nový .conf) - enable až po získání certifikátu
+```
+<VirtualHost _default_:443>
+                ServerAdmin webmaster@localhost
+
+                DocumentRoot /var/www/html
+                ServerName barticka.spos.n-io.cz
+
+                ErrorLog ${APACHE_LOG_DIR}/error.log
+                CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+                SSLEngine on
+
+                SSLCertificateFile      /etc/letsencrypt/live/barticka.spos.n-io.cz/cert.pem
+                SSLCertificateKeyFile   /etc/letsencrypt/live/barticka.spos.n-io.cz/privkey.pem
+
+                #SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
+
+                #SSLCACertificatePath /etc/ssl/certs/
+                #SSLCACertificateFile /etc/apache2/ssl.crt/ca-bundle.crt
+
+                #SSLCARevocationPath /etc/apache2/ssl.crl/
+                #SSLCARevocationFile /etc/apache2/ssl.crl/ca-bundle.crl
+
+                #SSLVerifyClient require
+                #SSLVerifyDepth  10
+
+                <FilesMatch "\.(cgi|shtml|phtml|php)$">
+                                SSLOptions +StdEnvVars
+                </FilesMatch>
+                <Directory /usr/lib/cgi-bin>
+                                SSLOptions +StdEnvVars
+                </Directory>
+</VirtualHost>
 ```
 
 ```
