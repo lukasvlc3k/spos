@@ -395,7 +395,7 @@ USE db01
 vytvoření uživatele
 
 ```
-CREATE USER 'db01'@'localhost' IDENTIFIED BY 'password';		// localhost možno nahradi třeba % pro všechny
+CREATE USER db01@localhost IDENTIFIED BY 'password';		// localhost možno nahradi třeba % pro všechny
 ```
 
 přihlášení
@@ -409,7 +409,7 @@ konfigurace přihlášení v ~/.my.cnf
 grant privilegií
 
 ```
-GRANT ALL PRIVILEGES ON db01.* to 'db01'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON db01.* to db01@localhost IDENTIFIED BY 'password';
 ```
 
 Zálohování přes:
