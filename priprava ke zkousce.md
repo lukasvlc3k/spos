@@ -564,7 +564,8 @@ Mutt pro prohlížení
 ```
 apt install mutt
 mutt -f /var/spool/mail/user
-mutt -d /home/user/Maildir
+mutt -f /home/user/Maildir
+mutt -f ~{user}/Maildir
 ```
 
 ```
