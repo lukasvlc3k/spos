@@ -540,6 +540,7 @@ v /etc/postfix/virtual
 <jaky mail>		<jakemu uzivateli>
 user@jindra3.spos	jindra
 ```
+(domény použité v souboru virtual musí být uvedeny ve virtual_domains)
 
 přidat uživatele
 
@@ -547,10 +548,11 @@ přidat uživatele
 adduser jindra
 ```
 
-potvrdit přes
+potvrdit přes (vygenerovat mapy)
 
 ```
 postmap /etc/postfix/virtual
+postmap /etc/postfix/virtual_domains
 ```
 
 všechny použité domény ale musí být uvedeny ve virtual_domains
