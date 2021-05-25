@@ -59,12 +59,13 @@ mdadm -Cv /dev/md0 -lX -nN /dev/sd[abc]
 ```
 mdadm --create --verbose /dev/md0 --level=10 --raid-devices=2 /dev/sdb /dev/sdc
 ```
-Kontrola
-```
+### Kontrola
 přehled všech raidů:
+```
 cat /proc/mdstat
-
+```
 detail 1 raidu:
+```
 mdadm --detail /dev/md0 
 ```
 
