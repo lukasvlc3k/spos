@@ -722,7 +722,14 @@ location / {
 konfigurace v /etc/crontab
 
 obecně není problém, ale defaultně se bere úkol jako "udělat v \* \* \* \* \* _", ale je možné to změnit na "udělat každých _ _/x _ \* \*", resp. dát před hodnotu lomítko
+https://crontab.guru/
 
+Každých 5 minut backup všech mysql databází
+```
+*/5 * * * * mysqldump --all-databases > /mnt/backup/mysql_backup.sql
+```
+	
+	
 ## Add key SSH
 
 ```
