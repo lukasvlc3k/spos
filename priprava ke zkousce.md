@@ -336,6 +336,9 @@ LetsEncrypt
 
 ```
 a2enmod ssl
+apt install git
+apt install curl
+
 
 cd /opt && git clone https://github.com/lukas2511/dehydrated && cd dehydrated
 mkdir /etc/dehydrated
@@ -357,9 +360,8 @@ nano /etc/dehydrated/domains < hostname
 
 mkdir -p /var/www/dehydrated/.well-known/acme-challenge/ /etc/letsencrypt/live/
 
-dehydrated --register --accept-terms
-
-dehydrated --cron
+./dehydrated --register --accept-terms
+./dehydrated --cron
 ```
 
 ## MySQL
