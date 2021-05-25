@@ -396,6 +396,9 @@ vytvoření uživatele
 
 ```
 CREATE USER db01@localhost IDENTIFIED BY 'password';		// localhost možno nahradi třeba % pro všechny
+
+pokud nefachá, zkusit 
+FLUSH PRIVILEGES;
 ```
 
 přihlášení
