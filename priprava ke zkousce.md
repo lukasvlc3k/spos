@@ -670,7 +670,7 @@ a potom v proxy_pass použijeme upstream
 
 ```
 location / {
-       	proxy_pass http://upstream;
+       	proxy_pass http://backend;
 }
 ```
 
