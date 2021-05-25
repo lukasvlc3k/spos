@@ -303,7 +303,21 @@ apt-get install php libapache2-mod-php php-mysql
 a2enmod php7.3
 ```
 
-LetsEncrypt
+
+### SSL
+
+#### Self signed
+https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-on-debian-10
+```
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+```
+nginx:
+```
+ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+```
+
+#### LetsEncrypt
 
 ```
 a2enmod ssl
