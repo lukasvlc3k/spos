@@ -436,6 +436,21 @@ startování databáze přes pg_ctlcluster verze sekce start
 konfigurace ve /etc/postgresql/verze
 databázové soubory ve /var/lib/postgresql
 
+/etc/postgresql/11/main/pg_hba.conf
+```
+<ipv4/6><databaze>	<uzivatele>	<adresy> 		<heslo>
+host    all             all             127.0.0.1/32            md5
+
+<localhost>	<databaze>	<uzivatele>			<na zaklade unix usera>	
+local   	all             all                             peer
+```
+
+/etc/postgresql/11/main/postgresql.conf
+```
+port = 5432
+data_directory = /var/lib/postgresql/11/main/
+```
+
 přepnutí pod uživatele postgres
 
 ```
