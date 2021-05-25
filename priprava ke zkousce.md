@@ -641,9 +641,9 @@ konfigurace v /etc/nginx/sites-enabled
 pro SSL přidat
 
 ```
-listen port ssl default_server;
-ssl_certificate /etc/letsencrypt/live/domain/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/domain/privkey.pem;
+listen {port} ssl default_server;
+ssl_certificate /etc/letsencrypt/live/{domain}/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/{domain}/privkey.pem;
 ```
 
 jako load balancer změnit root aby nebyl stejný jako u apache
