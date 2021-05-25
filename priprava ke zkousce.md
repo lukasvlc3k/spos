@@ -731,6 +731,11 @@ Každých 5 minut backup všech mysql databází
 ```
 */5 * * * * mysqldump --all-databases > /mnt/backup/mysql_backup.sql
 ```
+Záloha postgresu (všechny databáze), příkaz pg_dumpall musí spustit uživatel postgres, proto sudo -u, případně možno su - postgres a poté crontab -e
+```
+* * * * * sudo -u postgres pg_dumpall > /mnt/backup/pg_backup_latest.sql
+```
+	
 Přidání datumu do souboru, např.:
 ```	
 * * * * * mysqldump --all-databases > /mnt/backup/mysql_backup_$(date +\%Y\%m\%d\%H\%M\%S).sql
