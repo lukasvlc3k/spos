@@ -120,19 +120,22 @@ zóny v
 konfigurace zón v /etc/named.conf.local
 
 ```
-zone "barticka.spos." {			// Takhle definujeme zónu kde jsme master
+// Zona kde jsme master
+zone "barticka.spos." {			
     type master;
     file  "/etc/bind/db.barticka.spos";
     allow-transfer { adresa; };
 };
 
-zone "nekdojinej.spos." {			// Takhle definujeme zónu kde jsme slave
+// Zona kde jsme slave
+zone "nekdojinej.spos." {			
     type slave;
     file  "/etc/bind/slaves/db.barticka.spos";
     masters { ip adresa mastera; };
 };
 
-zone "nekdojinej.spos." {				// Takhle definujeme zónu, pro kterou forwardujeme
+// zona kterou forwardujeme
+zone "nekdojinej.spos." {				
     type forward;
     forwarders { ip adresa kam forwardujeme; };
 }
@@ -159,10 +162,10 @@ mail    IN      A       2.2.2.2	; Pro subdoménu mail použít tuto adresu
 Můžeme definovat ACL, které pak využijeme v match-clients
 
 ```
-acl "trusted" {							// Definujeme ACL
-        77.93.199.0/24;    # ns1 - can be set to localhost		// Povolené adresy
-        77.93.216.0/24;    # ns2
-        84.42.159.140;  # host1
+acl "trusted" {							
+        77.93.199.0/24;    		
+        77.93.216.0/24;    
+        84.42.159.140;  
         185.99.177.253;
         127.0.0.1;
 };
@@ -174,12 +177,12 @@ Options definuje globální nastavení
 options {
         directory "/var/cache/bind";
 
-        recursion yes;              	// Povolíme rekurzi
-        allow-recursion { trusted; };	// Ale jenom pro ACL trusted
-        listen-on { localhost; };   	// Posloucháme na tomhle
-        allow-transfer { none; };    	// Nepovolíme transfery zón
+        recursion yes;              	
+        allow-recursion { trusted; };	
+        listen-on { localhost; };   	
+        allow-transfer { none; };    	
 
-        forwarders {			// Pokud nevíme, ptáme se tady
+        forwarders {			
                 1.1.1.1;
                 1.1.2.2;
         };
@@ -189,28 +192,28 @@ options {
 Můžeme použít i pohledy
 
 ```
-view "private" {					// Definujeme pohled
-  match-clients { trusted; 192.168.0.0/24; }; // Pro ktere klienty
-  recursion yes;				// Povolime rekurzi
-  zone "barticka.spos." {			// Definujeme zony
+view "private" {					
+  match-clients { trusted; 192.168.0.0/24; }; 
+  recursion yes;				
+  zone "barticka.spos." {			
     type master;
-    file  "/etc/bind/private/db.barticka.spos"
+    file  "/etc/bind/private/db.barticka.spos";
     allow-transfer { adresa; };
   };
 
   zone "nekdojinej.spos." {
     type slave;
-    file  "/etc/bind/slaves/db.barticka.spos"
+    file  "/etc/bind/slaves/db.barticka.spos";
     masters { ip adresa mastera; };
   };
 };
 
-view "public" {				// Musime definovat pohled pro ostatni, jinak je budeme ignorovat
+view "public" {				
 match-clients { "any"; };
   recursion no;
   zone "barticka.spos." {
     type master;
-    file  "/etc/bind/public/db.barticka.spos"
+    file  "/etc/bind/public/db.barticka.spos";
   };
 };
 ```
