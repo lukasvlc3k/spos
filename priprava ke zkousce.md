@@ -331,10 +331,10 @@ Pro HTTPS (nový .conf) - enable až po získání certifikátu
 
                 SSLEngine on
 
-                SSLCertificateFile      /etc/letsencrypt/live/barticka.spos.n-io.cz/cert.pem
-                SSLCertificateKeyFile   /etc/letsencrypt/live/barticka.spos.n-io.cz/privkey.pem
+                SSLCertificateFile      /etc/letsencrypt/live/domain/cert.pem
+                SSLCertificateKeyFile   /etc/letsencrypt/live/domain/privkey.pem
 
-                #SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt
+                SSLCertificateChainFile /etc/letsencrypt/live/domain/chain.pem
 
                 #SSLCACertificatePath /etc/ssl/certs/
                 #SSLCACertificateFile /etc/apache2/ssl.crt/ca-bundle.crt
@@ -642,8 +642,8 @@ pro SSL přidat
 
 ```
 listen port ssl default_server;
-ssl_certificate /fullchain;
-ssl_certificate_key /privkey;
+ssl_certificate /etc/letsencrypt/live/domain/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/domain/privkey.pem;
 ```
 
 jako load balancer změnit root aby nebyl stejný jako u apache
