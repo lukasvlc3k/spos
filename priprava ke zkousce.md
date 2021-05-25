@@ -637,6 +637,11 @@ apt install nginx
 NginX běží na stejných portech jako Apache, ten je potřeba přemigrovat na jiné /etc/apache2/ports.conf a stejně tak v sites-enabled
 
 konfigurace v /etc/nginx/sites-enabled
+	
+možno přidat server name 
+```
+server_name <hostname>;
+```
 
 pro SSL přidat
 
@@ -652,7 +657,7 @@ potom upravit location - tohle provede přesměrování, nic víc
 
 ```
 location / {
-	proxy_pass http://localhost:port
+	proxy_pass http://localhost:port;
 }
 ```
 
