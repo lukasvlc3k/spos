@@ -720,7 +720,10 @@ location / {
 ## Cron
 
 konfigurace v /etc/crontab
-
+	
+```
+crontab -e
+```
 obecně není problém, ale defaultně se bere úkol jako "udělat v \* \* \* \* \* _", ale je možné to změnit na "udělat každých _ _/x _ \* \*", resp. dát před hodnotu lomítko
 https://crontab.guru/
 
@@ -728,7 +731,11 @@ Každých 5 minut backup všech mysql databází
 ```
 */5 * * * * mysqldump --all-databases > /mnt/backup/mysql_backup.sql
 ```
-	
+Přidání datumu do souboru, např.:
+```	
+* * * * * mysqldump --all-databases > /mnt/backup/mysql_backup_$(date +\%Y\%m\%d\%H\%M\%S).sql
+```
+
 	
 ## Add key SSH
 
