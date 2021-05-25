@@ -306,6 +306,13 @@ apt-get install php libapache2-mod-php php-mysql
 a2enmod php7.3
 ```
 
+Konfigurace PHP
+```
+/etc/php/7.3/apache2/php.ini
+
+disable_functions = phpinfo,...,...	
+```
+
 
 ### SSL
 
