@@ -739,8 +739,9 @@ Přidání datumu do souboru, např.:
 	
 ## Add key SSH
 
+výstup v ~/.ssh/id_rsa(.pub)
 ```
-ssh-keygen -b bits -t rsa    výstup v ~/.ssh/id_rsa(.pub)
+ssh-keygen -b 4096 -t rsa
 ssh-add private key
 ssh user@ip
 ```
